@@ -1,5 +1,4 @@
-# CST-201 (project is in Master
-)
+# CST-201 (project is in Master)
 Group Project for CST-201
 The purpose of this assignment is to assess your ability to: Create a game like battleship using pattern matching while integrating Christian values in the design and teamwork process.
 
