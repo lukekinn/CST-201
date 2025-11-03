@@ -1,30 +1,30 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Luke\\Desktop\\GCU CST\\CST - 201\\BattleShip\\WebApplication1\\WebApplication1.csproj": {}
+    "/workspaces/CST-201/WebApplication1/WebApplication1.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Luke\\Desktop\\GCU CST\\CST - 201\\BattleShip\\WebApplication1\\WebApplication1.csproj": {
+    "/workspaces/CST-201/WebApplication1/WebApplication1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Luke\\Desktop\\GCU CST\\CST - 201\\BattleShip\\WebApplication1\\WebApplication1.csproj",
+        "projectUniqueName": "/workspaces/CST-201/WebApplication1/WebApplication1.csproj",
         "projectName": "WebApplication1",
-        "projectPath": "C:\\Users\\Luke\\Desktop\\GCU CST\\CST - 201\\BattleShip\\WebApplication1\\WebApplication1.csproj",
-        "packagesPath": "C:\\Users\\Luke\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Luke\\Desktop\\GCU CST\\CST - 201\\BattleShip\\WebApplication1\\obj\\",
+        "projectPath": "/workspaces/CST-201/WebApplication1/WebApplication1.csproj",
+        "packagesPath": "/home/codespace/.nuget/packages/",
+        "outputPath": "/workspaces/CST-201/WebApplication1/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Luke\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "/home/codespace/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
-          "net9.0"
+          "net8.0"
         ],
         "sources": {
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net9.0": {
-            "targetAlias": "net9.0",
+          "net8.0": {
+            "targetAlias": "net8.0",
             "projectReferences": {}
           }
         },
@@ -37,12 +37,11 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "9.0.300"
+        }
       },
       "frameworks": {
-        "net9.0": {
-          "targetAlias": "net9.0",
+        "net8.0": {
+          "targetAlias": "net8.0",
           "imports": [
             "net461",
             "net462",
@@ -55,14 +54,11 @@
           "assetTargetFallback": true,
           "warn": true,
           "frameworkReferences": {
-            "Microsoft.AspNetCore.App": {
-              "privateAssets": "none"
-            },
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.412/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

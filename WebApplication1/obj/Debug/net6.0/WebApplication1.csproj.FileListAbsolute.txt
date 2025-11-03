@@ -1,0 +1,12 @@
+/workspaces/CST-201/WebApplication1/bin/Debug/net6.0/WebApplication1.deps.json
+/workspaces/CST-201/WebApplication1/bin/Debug/net6.0/WebApplication1.dll
+/workspaces/CST-201/WebApplication1/bin/Debug/net6.0/WebApplication1.pdb
+/workspaces/CST-201/WebApplication1/obj/Debug/net6.0/WebApplication1.GeneratedMSBuildEditorConfig.editorconfig
+/workspaces/CST-201/WebApplication1/obj/Debug/net6.0/WebApplication1.AssemblyInfoInputs.cache
+/workspaces/CST-201/WebApplication1/obj/Debug/net6.0/WebApplication1.AssemblyInfo.cs
+/workspaces/CST-201/WebApplication1/obj/Debug/net6.0/WebApplication1.csproj.CoreCompileInputs.cache
+/workspaces/CST-201/WebApplication1/obj/Debug/net6.0/WebApplication1.sourcelink.json
+/workspaces/CST-201/WebApplication1/obj/Debug/net6.0/WebApplication1.dll
+/workspaces/CST-201/WebApplication1/obj/Debug/net6.0/refint/WebApplication1.dll
+/workspaces/CST-201/WebApplication1/obj/Debug/net6.0/WebApplication1.pdb
+/workspaces/CST-201/WebApplication1/obj/Debug/net6.0/ref/WebApplication1.dll

@@ -53,8 +53,13 @@ namespace BattleShip
 
         public void Setup()
         {
-            Console.WriteLine("Welcome to BattleShip");
-            Console.WriteLine("Place your ships. You have a Destroyer (2x2), Submarine (diagonal 3), and Cruiser (straight 3).");
+            Console.WriteLine("Welcome to BattleShip: Face off against the computer in a game of strategy and luck!");
+            Console.WriteLine("The objective is to sink all of your opponent's ships before they sink yours.");
+            Console.WriteLine("***********************************************************************************************************");
+            Console.WriteLine("Proverbs 15:18 A hot-tempered person stirs up conflict, but the one who is patient calms a quarrel");
+            Console.WriteLine("***********************************************************************************************************");
+            Console.WriteLine("You and the computer will each place three ships on a 10x10 grid.");
+            Console.WriteLine("Place your ships. You have a Destroyer (a 2x2 cube), Submarine (diagonal 3), and Cruiser (straight 3 line).");
             PlacePlayerShips();
             PlaceComputerShipsRandom();
             Console.WriteLine("Prepare for battle!");
@@ -72,7 +77,7 @@ namespace BattleShip
             Console.WriteLine($"\nPlacing {kind}:");
             while (true)
             {
-                Console.Write("Enter start coordinate (e.g., A1 or '1 1'): ");
+                Console.Write("Enter start coordinate (e.g., A1 or '1 1' (this will place your ships onto the game board)):");
                 var p = ReadCoord();
                 if (p == null) { Console.WriteLine("Invalid coordinate. Try again."); continue; }
 
@@ -85,7 +90,7 @@ namespace BattleShip
                 };
 
                 if (cells == null) continue; // preventing ship misplacement from user error
-                if (cells.Any(pt => !InBounds(pt))) { Console.WriteLine("Ship would be out of bounds. Try again."); continue; }
+                if (cells.Any(pt => !InBounds(pt))) { Console.WriteLine("Ship would be out of bounds. Try again.");  continue; }
                 if (cells.Any(pt => b.ShipIndex[pt.R, pt.C] != -1)) { Console.WriteLine("Collides with an existing ship. Try again."); continue; }
 
                 AddShipToBoard(b, kind, cells);
@@ -205,7 +210,7 @@ namespace BattleShip
 
                     bool hit = ApplyShot(computer, coord.Value, isPlayerShot: true);
                     if (!hit) playerTurn = false;
-                    else if (computer.AllSunk()) { Console.WriteLine("You win!"); break; }
+                    else if (computer.AllSunk()) { Console.WriteLine("You win!  "); break; }
                 }
                 else
                 {
@@ -219,6 +224,7 @@ namespace BattleShip
             }
 
             Console.WriteLine("Game over. Final boards:");
+            Console.WriteLine("I have fought the good fight, I have finished the race, I have kept the faith – 2 Timothy 4:7");
             PrintBoard(player, showShips: true);
             PrintBoard(computer, showShips: true);
         }
@@ -252,8 +258,8 @@ namespace BattleShip
             ship.Hits.Add((shot.R, shot.C));
             target.Shots[shot.R, shot.C] = Cell.Hit;
 
-            Console.WriteLine(isPlayerShot ? $"Hit {ship.Type}!" : $"Computer hit your {ship.Type}!");
-            if (ship.IsSunk) Console.WriteLine(isPlayerShot ? $"{ship.Type} sunk!" : $"Your {ship.Type} was sunk!");
+            Console.WriteLine(isPlayerShot ? $"Hit {ship.Type}!" : $"Computer hit your {ship.Type}! Blessed is the one who endures trials, because when he has stood the test he will receive the crown of life that God has promised to those who love him – James 1:12");
+            if (ship.IsSunk) Console.WriteLine(isPlayerShot ? $"{ship.Type} sunk!" : $"Your {ship.Type} was sunk! But as for you, be strong; don’t give up, for your work has a reward – 2 Chronicles 15:7");
             return true;
         }
 
