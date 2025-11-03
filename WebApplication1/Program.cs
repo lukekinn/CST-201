@@ -9,33 +9,34 @@ namespace BattleShip
         static void Main(string[] args)
         {
             var game = new Game();
-            game.Setup();
-            game.Play();
+            game.Setup(); //Give intro message and set up ships
+            game.Play(); //Main game loop, player and coimputer take turns until win condition met (all ships sank on one side)
         }
     }
 
-    // Simple immutable point (value type so Point? is Nullable<Point> and has .Value)
-    record struct Point(int R, int C);
+    //Simple immutable point (value type so Point? is Nullable<Point> and has .Value)
+    //Sets up rows and columns for the board
+    record struct Point(int R, int C); //record struct as a way to keep things lightweight
 
-    enum Cell { Empty, Miss, Hit }
+    enum Cell { Empty, Miss, Hit } //board cell states
     enum ShipType { Destroyer, Submarine, Cruiser }
 
     class Ship
     {
         public ShipType Type;
-        public List<Point> Cells = new();
-        public HashSet<(int r, int c)> Hits = new();
-        public bool IsSunk => Hits.Count >= Cells.Count;
+        public List<Point> Cells = new();//coordinates occupied by the ship 
+        public HashSet<(int r, int c)> Hits = new(); //coordinares that have been hit
+        public bool IsSunk => Hits.Count >= Cells.Count;//once all cells from a ship have been hit and sunk
     }
 
     class Board
     {
-        public const int Size = 10;
+        public const int Size = 10; //establishes a 10x10 board
         public int[,] ShipIndex = new int[Size, Size];   // -1 = no ship, otherwise index into Ships
-        public Cell[,] Shots = new Cell[Size, Size];
-        public List<Ship> Ships = new();
+        public Cell[,] Shots = new Cell[Size, Size]; //what shots have hit
+        public List<Ship> Ships = new(); //the ships that are on the board
 
-        public Board()
+        public Board() //initialize ShipIndex to -1, so there are no ships placed yet
         {
             for (int r = 0; r < Size; r++)
                 for (int c = 0; c < Size; c++)
@@ -45,13 +46,13 @@ namespace BattleShip
         public bool AllSunk() => Ships.All(s => s.IsSunk);
     }
 
-    class Game
+    class Game //sets up and runs the game, including player and computer boards
     {
         Board player = new();
         Board computer = new();
         Random rng = new();
 
-        public void Setup()
+        public void Setup() //introduction and ship placement
         {
             Console.WriteLine("Welcome to BattleShip: Face off against the computer in a game of strategy and luck!");
             Console.WriteLine("The objective is to sink all of your opponent's ships before they sink yours.");
@@ -59,27 +60,27 @@ namespace BattleShip
             Console.WriteLine("Proverbs 15:18 A hot-tempered person stirs up conflict, but the one who is patient calms a quarrel");
             Console.WriteLine("***********************************************************************************************************");
             Console.WriteLine("You and the computer will each place three ships on a 10x10 grid.");
-            Console.WriteLine("Place your ships. You have a Destroyer (a 2x2 cube), Submarine (diagonal 3), and Cruiser (straight 3 line).");
-            PlacePlayerShips();
-            PlaceComputerShipsRandom();
+            Console.WriteLine("Place your ships. You have a Destroyer (a 2x2 cube starting from the top right), Submarine (diagonal 3), and Cruiser (straight 3 line).");
+            PlacePlayerShips(); //interactive placement for player ships
+            PlaceComputerShipsRandom(); //radom placement for computer ships, with checks to prevent overlap or out of bounds
             Console.WriteLine("Prepare for battle!");
         }
 
-        void PlacePlayerShips()
+        void PlacePlayerShips() //a fixed order of ship placement for the player
         {
             PlaceShipInteractive(player, ShipType.Destroyer);
             PlaceShipInteractive(player, ShipType.Submarine);
             PlaceShipInteractive(player, ShipType.Cruiser);
         }
 
-        void PlaceShipInteractive(Board b, ShipType kind)
+        void PlaceShipInteractive(Board b, ShipType kind) //promting user for ship placement based on coordinates and orientation
         {
             Console.WriteLine($"\nPlacing {kind}:");
             while (true)
             {
                 Console.Write("Enter start coordinate (e.g., A1 or '1 1' (this will place your ships onto the game board)):");
                 var p = ReadCoord();
-                if (p == null) { Console.WriteLine("Invalid coordinate. Try again."); continue; }
+                if (p == null) { Console.WriteLine("Invalid coordinate. Try again."); continue; } //user inputs invalid coordinate
 
                 List<Point>? cells = kind switch
                 {
@@ -93,13 +94,13 @@ namespace BattleShip
                 if (cells.Any(pt => !InBounds(pt))) { Console.WriteLine("Ship would be out of bounds. Try again.");  continue; }
                 if (cells.Any(pt => b.ShipIndex[pt.R, pt.C] != -1)) { Console.WriteLine("Collides with an existing ship. Try again."); continue; }
 
-                AddShipToBoard(b, kind, cells);
+                AddShipToBoard(b, kind, cells); //commit ship placement to board
                 Console.WriteLine($"{kind} placed.");
                 break;
             }
         }
 
-        // Destroyer: 2x2 square using top-left
+        // Destroyer: 2x2 square using top-left as the root of the coordinates
         List<Point> GetDestroyerCells(Point topLeft)
         {
             return new List<Point>
@@ -118,9 +119,9 @@ namespace BattleShip
             var dir = Console.ReadLine()?.Trim();
             if (dir != "1" && dir != "2") { Console.WriteLine("Invalid direction."); return null; }
 
-            if (dir == "1")
+            if (dir == "1") //SE diagonal
                 return new List<Point> { start, new(start.R + 1, start.C + 1), new(start.R + 2, start.C + 2) };
-            else
+            else //SW diagonal
                 return new List<Point> { start, new(start.R + 1, start.C - 1), new(start.R + 2, start.C - 2) };
         }
 
@@ -141,7 +142,7 @@ namespace BattleShip
             };
         }
 
-        void PlaceComputerShipsRandom()
+        void PlaceComputerShipsRandom() //randomized ship placement for computer with bounds and overlap checks
         {
             // Destroyer
             while (true)
@@ -187,6 +188,7 @@ namespace BattleShip
             Console.WriteLine("Computer ships placed.");
         }
 
+        //adds ship to the board and updates ShipIndex accordingly
         void AddShipToBoard(Board b, ShipType kind, List<Point> cells)
         {
             var ship = new Ship { Type = kind, Cells = cells };
@@ -195,12 +197,12 @@ namespace BattleShip
             foreach (var p in cells) b.ShipIndex[p.R, p.C] = idx;
         }
 
-        public void Play()
+        public void Play() //main game loop where player and computer take turns shooting until win condition met
         {
             bool playerTurn = true;
             while (!player.AllSunk() && !computer.AllSunk())
             {
-                if (playerTurn)
+                if (playerTurn) //player fires onto the enemy board
                 {
                     PrintOpponentView();
                     Console.Write("Enter shot coordinate: ");
@@ -214,7 +216,7 @@ namespace BattleShip
                 }
                 else
                 {
-                    // naive AI: first untried on player's board
+                    // Computer's turn: simple strategy of first untried cell
                     Point shot = FirstUntriedOnPlayer();
                     Console.WriteLine($"Computer shoots {CoordToString(shot)}");
                     bool hit = ApplyShot(player, shot, isPlayerShot: false);
@@ -222,21 +224,21 @@ namespace BattleShip
                     else if (player.AllSunk()) { Console.WriteLine("Computer wins."); break; }
                 }
             }
-
+            // game end, revealing final boards
             Console.WriteLine("Game over. Final boards:");
             Console.WriteLine("I have fought the good fight, I have finished the race, I have kept the faith – 2 Timothy 4:7");
             PrintBoard(player, showShips: true);
             PrintBoard(computer, showShips: true);
         }
 
-        Point FirstUntriedOnPlayer()
+        Point FirstUntriedOnPlayer() //targeting first cell that hasn't been shot at yet
         {
             for (int r = 0; r < Board.Size; r++)
                 for (int c = 0; c < Board.Size; c++)
                     if (player.Shots[r, c] == Cell.Empty)
                         return new Point(r, c);
 
-            // fallback (shouldn’t hit)
+            // fallback (shouldn’t be the case, but just in case will return a random untried cell)
             while (true)
             {
                 int r = rng.Next(Board.Size), c = rng.Next(Board.Size);
@@ -244,16 +246,16 @@ namespace BattleShip
             }
         }
 
-        bool ApplyShot(Board target, Point shot, bool isPlayerShot)
+        bool ApplyShot(Board target, Point shot, bool isPlayerShot) //resolve shot and update board state
         {
-            if (target.ShipIndex[shot.R, shot.C] == -1)
+            if (target.ShipIndex[shot.R, shot.C] == -1) //miss
             {
                 target.Shots[shot.R, shot.C] = Cell.Miss;
                 Console.WriteLine(isPlayerShot ? "Miss." : "Computer missed.");
                 return false;
             }
 
-            int idx = target.ShipIndex[shot.R, shot.C];
+            int idx = target.ShipIndex[shot.R, shot.C]; //hit, check which ship was hit and update its state, then check if sunk
             var ship = target.Ships[idx];
             ship.Hits.Add((shot.R, shot.C));
             target.Shots[shot.R, shot.C] = Cell.Hit;
@@ -292,13 +294,13 @@ namespace BattleShip
 
         bool InBounds(Point p) => p.R >= 0 && p.R < Board.Size && p.C >= 0 && p.C < Board.Size;
 
-        void PrintOpponentView()
+        void PrintOpponentView() //print the opponent's board from the player's perspective
         {
             Console.WriteLine("\nOpponent board (what you know):");
             PrintBoard(computer, showShips: false);
         }
 
-        void PrintBoard(Board b, bool showShips)
+        void PrintBoard(Board b, bool showShips) //print the board, optionally showing ship locations
         {
             Console.Write("   ");
             for (int c = 1; c <= Board.Size; c++) Console.Write($"{c,2} ");
@@ -319,6 +321,7 @@ namespace BattleShip
             }
         }
 
+        //convert coordinate to string format (e.g., A1)
         string CoordToString(Point p) => $"{(char)('A' + p.R)}{p.C + 1}";
     }
 }
